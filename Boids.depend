@@ -1,0 +1,65 @@
+# depslib dependency file v1.0
+1423076549 source:c:\users\owen\desktop\boids\src\circles.cpp
+	<iostream>
+	"circles.h"
+
+1423076264 c:\users\owen\desktop\boids\include\circles.h
+	<vector>
+	<SFML/Graphics.hpp>
+	<cstdlib>
+	<math.h>
+
+1423441431 source:c:\users\owen\desktop\boids\src\main.cpp
+	<cstdlib>
+	<iostream>
+	<ctime>
+	<SFML/Graphics.hpp>
+	"boid.h"
+	"assets.h"
+	"timer.h"
+	"vectormath.h"
+	"obstacle.h"
+
+1423441197 source:c:\users\owen\desktop\boids\src\boid.cpp
+	"boid.h"
+
+1423438187 c:\users\owen\desktop\boids\include\boid.h
+	<iostream>
+	<string>
+	<sstream>
+	<SFML/Graphics.hpp>
+	"vectormath.h"
+	"obstacle.h"
+
+1423431926 source:c:\users\owen\desktop\boids\src\assets.cpp
+	"assets.h"
+
+1423410997 c:\users\owen\desktop\boids\include\assets.h
+	<SFML/Graphics.hpp>
+	<tr1/unordered_map>
+	<string>
+
+1423417562 c:\users\owen\desktop\boids\include\timer.h
+	<iostream>
+	<SFML/Graphics.hpp>
+	<string>
+	<sstream>
+
+1423417918 source:c:\users\owen\desktop\boids\src\timer.cpp
+	"timer.h"
+
+1423415736 source:c:\users\owen\desktop\boids\src\vectormath.cpp
+	"vectormath.h"
+
+1423414359 c:\users\owen\desktop\boids\include\vectormath.h
+	<SFML/Graphics.hpp>
+	<math.h>
+
+1423440200 c:\users\owen\desktop\boids\include\obstacle.h
+	<iostream>
+	<SFML/Graphics.hpp>
+	"vectormath.h"
+
+1423440314 source:c:\users\owen\desktop\boids\src\obstacle.cpp
+	"obstacle.h"
+
