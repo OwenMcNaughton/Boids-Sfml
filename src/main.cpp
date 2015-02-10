@@ -14,6 +14,8 @@ int main()
     std::srand(std::time(0));
 
 
+    sf::Color bg(25, 25, 110, 255);
+
     int width = 512 << 0;
     int height = 320 << 0;
     float box = width/Assets::boxCount;
@@ -184,7 +186,7 @@ int main()
             }
         }
 
-        window.clear();
+        window.clear(bg);
 
         if(showGrid) {
             for(int i = 0; i != fakeRects.size(); i++) {
