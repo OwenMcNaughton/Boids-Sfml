@@ -48,6 +48,19 @@ class Boid
         sf::Vector2i rectPos;
         sf::Vector2f vel;
 
+        static float boidSepNormal;
+        static float boidSharkSepNormal;
+        static float boidCohNormal;
+        static float boidAliNormal;
+
+        static float boidSepFlag;
+        static float boidSharkSepFlag;
+        static float boidCohFlag;
+        static float boidAliFlag;
+
+        static float sepDist;
+        static float sharkSepDist;
+
     protected:
     private:
         bool shark;
@@ -62,7 +75,6 @@ class Boid
         sf::Vector2f acc;
         float maxSpeed, xSpeed;
         float maxForce, xForce;
-        float sepDist;
         float alignDist;
         float cohDist;
 

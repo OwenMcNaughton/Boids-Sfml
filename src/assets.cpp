@@ -1,5 +1,8 @@
 #include "assets.h"
 
+int Assets::boxCount = 8;
+int Assets::boxJ = 5;
+
 Assets::Assets()
 {
     addTexture("arrow", "res\\arrow.png");

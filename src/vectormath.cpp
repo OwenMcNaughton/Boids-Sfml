@@ -45,12 +45,14 @@ float VectorMath::dist(const sf::Vector2f& v1, const sf::Vector2f& v2)
 
 float VectorMath::sin(float x)
 {
-    return x - pow(x, TAYLOR_3) + pow(x, TAYLOR_5);
+    return sin(x);
+    //return x - pow(x, TAYLOR_3) + pow(x, TAYLOR_5);
 }
 
 float VectorMath::cos(float x)
 {
-    return x - pow(x, TAYLOR_2) + pow(x, TAYLOR_4);
+    return cos(x);
+    //return x - pow(x, TAYLOR_2) + pow(x, TAYLOR_4);
 }
 
 float VectorMath::angle(const sf::Vector2f& v) {

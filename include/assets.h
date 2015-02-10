@@ -17,6 +17,9 @@ class Assets
         void addFont(std::string key, std::string path);
         sf::Font * getFont(std::string key);
 
+        static int boxCount;
+        static int boxJ;
+
         virtual ~Assets();
     protected:
     private:
