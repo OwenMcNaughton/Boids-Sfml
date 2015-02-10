@@ -63,3 +63,57 @@
 1423440314 source:c:\users\owen\desktop\boids\src\obstacle.cpp
 	"obstacle.h"
 
+1423417918 source:c:\users\owen\documents\github\boids-sfml\src\timer.cpp
+	"timer.h"
+
+1423417562 c:\users\owen\documents\github\boids-sfml\include\timer.h
+	<iostream>
+	<SFML/Graphics.hpp>
+	<string>
+	<sstream>
+
+1423525711 source:c:\users\owen\documents\github\boids-sfml\src\assets.cpp
+	"assets.h"
+
+1423524604 c:\users\owen\documents\github\boids-sfml\include\assets.h
+	<SFML/Graphics.hpp>
+	<tr1/unordered_map>
+	<string>
+
+1423526819 source:c:\users\owen\documents\github\boids-sfml\src\boid.cpp
+	"boid.h"
+
+1423512242 c:\users\owen\documents\github\boids-sfml\include\boid.h
+	<iostream>
+	<string>
+	<sstream>
+	<SFML/Graphics.hpp>
+	"vectormath.h"
+	"obstacle.h"
+
+1423414359 c:\users\owen\documents\github\boids-sfml\include\vectormath.h
+	<SFML/Graphics.hpp>
+	<math.h>
+
+1423440200 c:\users\owen\documents\github\boids-sfml\include\obstacle.h
+	<iostream>
+	<SFML/Graphics.hpp>
+	"vectormath.h"
+
+1423526873 source:c:\users\owen\documents\github\boids-sfml\src\main.cpp
+	<cstdlib>
+	<iostream>
+	<ctime>
+	<SFML/Graphics.hpp>
+	"boid.h"
+	"assets.h"
+	"timer.h"
+	"vectormath.h"
+	"obstacle.h"
+
+1423440314 source:c:\users\owen\documents\github\boids-sfml\src\obstacle.cpp
+	"obstacle.h"
+
+1423526212 source:c:\users\owen\documents\github\boids-sfml\src\vectormath.cpp
+	"vectormath.h"
+
