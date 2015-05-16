@@ -1,13 +1,13 @@
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 
 #include "boid.h"
 #include "assets.h"
 #include "timer.h"
 #include "vectormath.h"
-#include "obstacle.h"
 
 int main()
 {
@@ -16,14 +16,12 @@ int main()
 
     sf::Color bg(25, 25, 110, 255);
 
-    int width = 512 << 0;
-    int height = 320 << 0;
+    int width = 512 << 1;
+    int height = 320 << 1;
     float box = width/Assets::boxCount;
 
     sf::Color grey(150, 150, 150, 255);
     sf::Color red(200, 20, 20, 255);
-
-    std::vector<Obstacle> obstacles;
 
     std::vector<std::vector<sf::IntRect>> rects;
     for(int i = 0; i != Assets::boxCount; i++) {
@@ -68,10 +66,10 @@ int main()
     text.setColor(sf::Color::White);
 
     std::vector<Boid> boids;
-    for(int i = 0; i != 120; i++) {
+    for(int i = 0; i != 600; i++) {
         float a = std::rand() % 360;
         boids.push_back(Boid(assets.getTexture("arrow"),
-                                sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y,
+                                rand() % width, rand() % height,
                                 a, width, height, rects));
     }
 
@@ -170,18 +168,9 @@ int main()
                     sharks.push_back(b);
                     break;
                 }
-                if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-                    Obstacle o(20, sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-                    obstacles.push_back(o);
-                }
             } break;
             case sf::Event::MouseWheelMoved:
             {
-                for(int i = 0; i != obstacles.size(); i++) {
-                    if(obstacles[i].contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-                        obstacles[i].resize(event.mouseWheel.delta);
-                    }
-                }
             } break;
             }
         }
@@ -210,18 +199,13 @@ int main()
                 }
             }
         }
-
-        for(int i = 0; i != obstacles.size(); i++) {
-            obstacles[i].draw(window);
-        }
-
         for(int i = 0; i != boids.size(); i++) {
-            boids[i].update(dt, window, boids, sharks, obstacles, rects);
+            boids[i].update(dt, window, boids, sharks, rects);
             boids[i].draw(window);
         }
 
         for(int i = 0; i != sharks.size(); i++) {
-            sharks[i].update(dt, window, boids, sharks, obstacles, rects);
+            sharks[i].update(dt, window, boids, sharks, rects);
             sharks[i].draw(window);
         }
 

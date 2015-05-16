@@ -1,12 +1,12 @@
 #include "boid.h"
 
 
-float Boid::boidSepNormal = 2.0;
+float Boid::boidSepNormal = 2.5;
 float Boid::boidSharkSepNormal = 0.0;
 float Boid::boidCohNormal = 1.0;
-float Boid::boidAliNormal = 1.3;
+float Boid::boidAliNormal = 2.0;
 
-float Boid::boidSepFlag = 0.0;
+float Boid::boidSepFlag = 2.0;
 float Boid::boidSharkSepFlag = 1.5;
 float Boid::boidCohFlag = 0.1;
 float Boid::boidAliFlag = 0.1;
@@ -18,8 +18,8 @@ Boid::Boid()
 {}
 
 Boid::Boid(sf::Texture * argtex, float x, float y, float a, int w, int h, const std::vector<std::vector<sf::IntRect>>& rects)
-    : pos(x, y), trailOn(false), trailIdx(0), alignDist(50.0), cohDist(50.0),
-        maxSpeed(2.0), xSpeed(maxSpeed*15), maxForce(0.03), xForce(maxForce*5),
+    : pos(x, y), trailOn(false), trailIdx(0), alignDist(30.0), cohDist(50.0),
+        maxSpeed(2.0), xSpeed(maxSpeed*15), maxForce(0.08), xForce(maxForce*2),
         worldWidth(w), worldHeight(h), vel(cos(a), sin(a))
 {
     spriteTex = argtex;
@@ -48,7 +48,7 @@ void Boid::sharkify()
     sprite.scale(2, 2);
     cohDist = 200.0;
     maxForce = 0.01;
-    maxSpeed = 1.7;
+    maxSpeed = 2.7;
 }
 
 void Boid::draw(sf::RenderTarget& window)
@@ -104,13 +104,13 @@ sf::Vector2i Boid::quickRectPos(const std::vector<std::vector<sf::IntRect>>& rec
 }
 
 void Boid::update(float dt, sf::RenderWindow& window, const std::vector<Boid>& boids, const std::vector<Boid>& sharks,
-                  const std::vector<Obstacle> obstacles, const std::vector<std::vector<sf::IntRect>>& rects)
+                  const std::vector<std::vector<sf::IntRect>>& rects)
 {
     sharkFlag = false;
 
     //rectPos = quickRectPos(rects);
 
-    sf::Vector2f sep = separation(boids, obstacles);
+    sf::Vector2f sep = separation(boids);
     sf::Vector2f sharkSep = sharkSeparation(sharks);
     sf::Vector2f coh = cohesion(boids);
     sf::Vector2f ali;
@@ -174,21 +174,21 @@ void Boid::borders() {
     if (pos.y > worldHeight) pos.y = 0;
 }
 
-sf::Vector2f Boid::separation(const std::vector<Boid>& boids, const std::vector<Obstacle> obstacles)
+sf::Vector2f Boid::separation(const std::vector<Boid>& boids)
 {
     sf::Vector2f v(0, 0);
     int count = 0;
-    for(auto b : boids) {
-        if(sameRect(b)) {
-            float dist = VectorMath::dist(pos, b.pos);
+    for(int i = 0; i != boids.size(); i++) {
+        //if(sameRect(b)) {
+            float dist = VectorMath::dist(pos, boids[i].pos);
             if((dist > 0.001 && dist < Boid::sepDist)) {
-                sf::Vector2f diff = VectorMath::sub(pos, b.pos);
+                sf::Vector2f diff = VectorMath::sub(pos, boids[i].pos);
                 VectorMath::normalize(diff);
                 VectorMath::divSIP(diff, dist);
                 VectorMath::addIP(v, diff);
                 count++;
             }
-        }
+        //}
     }
 
     if(count > 0) {
@@ -196,16 +196,6 @@ sf::Vector2f Boid::separation(const std::vector<Boid>& boids, const std::vector<
     }
 
     count = 0;
-    for(auto o : obstacles) {
-        float dist = VectorMath::dist(pos, o.pos);
-            if((dist > 0.001 && dist < sepDist + o.radius*3)) {
-                sf::Vector2f diff = VectorMath::sub(pos, o.pos);
-                VectorMath::normalize(diff);
-                VectorMath::mulSIP(diff, 10);
-                VectorMath::addIP(v, diff);
-                count++;
-            }
-    }
 
     if(v.x == 0 && v.y == 0) return v;
 
@@ -226,10 +216,10 @@ sf::Vector2f Boid::sharkSeparation(const std::vector<Boid>& boids)
 {
     sf::Vector2f v(0, 0);
     int count = 0;
-    for(auto b : boids) {
-        float dist = VectorMath::dist(pos, b.pos);
+    for(int i = 0; i != boids.size(); i++) {
+        float dist = VectorMath::dist(pos, boids[i].pos);
         if((dist > 0.001 && dist < Boid::sharkSepDist)) {
-            sf::Vector2f diff = VectorMath::sub(pos, b.pos);
+            sf::Vector2f diff = VectorMath::sub(pos, boids[i].pos);
             VectorMath::normalize(diff);
             VectorMath::mulSIP(diff, 1);
             sharkFlag = true;
@@ -266,14 +256,15 @@ sf::Vector2f Boid::cohesion(const std::vector<Boid>& boids)
 {
     sf::Vector2f sum(0, 0);
     int count = 0;
-    for(auto b : boids) {
-        if((sameRect(b) && !b.shark) || (shark && !b.shark)) {
-            float dist = VectorMath::dist(pos, b.pos);
-            if(dist > 0.001 && dist < cohDist) {
-                VectorMath::addIP(sum, b.pos);
+    for(int i = 0; i != boids.size(); i++) {
+        //if((sameRect(b) && !b.shark) || (shark && !b.shark)) {
+            //float dist = VectorMath::dist(pos, boids[i].pos);
+			if(VectorMath::qdist(pos, boids[i].pos, cohDist)) {
+            //if(dist > 0.001 && dist < cohDist) {
+                VectorMath::addIP(sum, boids[i].pos);
                 count++;
             }
-        }
+        //}
     }
 
     if(count > 0) {
@@ -288,14 +279,15 @@ sf::Vector2f Boid::alignment(const std::vector<Boid>& boids)
 {
     sf::Vector2f sum(0, 0);
     int count = 0;
-    for(auto b : boids) {
-        if(sameRect(b) || (shark && !b.shark)) {
-            float dist = VectorMath::dist(pos, b.pos);
-            if(dist > 0.001 && dist < alignDist) {
-                VectorMath::addIP(sum, b.vel);
+    for(int i = 0; i != boids.size(); i++) {
+        //if(sameRect(b) || (shark && !b.shark)) {
+            //float dist = VectorMath::dist(pos, boids[i].pos);
+			if(VectorMath::qdist(pos, boids[i].pos, alignDist)) {
+            //if(dist > 0.001 && dist < alignDist) {
+                VectorMath::addIP(sum, boids[i].vel);
                 count++;
             }
-        }
+        //}
     }
 
     if(count > 0) {

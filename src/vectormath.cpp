@@ -40,7 +40,13 @@ float VectorMath::dist(const sf::Vector2f& v1, const sf::Vector2f& v2)
 {
     float dx = v1.x - v2.x;
     float dy = v1.y - v2.y;
-    return q_rsqrt(dx*dx + dy*dy);
+    return sqrt(dx*dx + dy*dy);
+}
+
+bool VectorMath::qdist(const sf::Vector2f& v1, const sf::Vector2f& v2, float d)
+{
+	if(abs(v1.x - v2.x) > d) return false;
+	return abs(v1.y - v2.y) < d;
 }
 
 float VectorMath::sin(float x)

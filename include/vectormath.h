@@ -2,7 +2,7 @@
 #define VECTORMATH_H
 
 #include <SFML/Graphics.hpp>
-#include <math.h>
+#include <cmath>
 
 #define PI 3.14159265
 #define TAYLOR_2 2/(2)
@@ -22,6 +22,7 @@ class VectorMath
         static void normalize(sf::Vector2f& v);
         static void limit(sf::Vector2f& v, float max);
         static float dist(const sf::Vector2f& v1, const sf::Vector2f& v2);
+		static bool qdist(const sf::Vector2f& v1, const sf::Vector2f& v2, float d);
 
         static float sin(float x);
         static float cos(float x);

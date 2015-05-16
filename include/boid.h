@@ -7,7 +7,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "vectormath.h"
-#include "obstacle.h"
 
 class Boid
 {
@@ -24,11 +23,11 @@ class Boid
 
         void draw(sf::RenderTarget& window);
         void update(float dt, sf::RenderWindow& window, const std::vector<Boid>& boids, const std::vector<Boid>& sharks,
-                    const std::vector<Obstacle> obstacles, const std::vector<std::vector<sf::IntRect>>& rects);
+                    const std::vector<std::vector<sf::IntRect>>& rects);
 
         void borders();
 
-        sf::Vector2f separation(const std::vector<Boid>& boids, const std::vector<Obstacle> obstacles);
+        sf::Vector2f separation(const std::vector<Boid>& boids);
         sf::Vector2f sharkSeparation(const std::vector<Boid>& boids);
         sf::Vector2f cohesion(const std::vector<Boid>& boids);
         sf::Vector2f alignment(const std::vector<Boid>& boids);
