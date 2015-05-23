@@ -16,8 +16,8 @@ int main()
 
     sf::Color bg(25, 25, 110, 255);
 
-    int width = 512 << 1;
-    int height = 320 << 1;
+    int width = 600;
+    int height = 650;
     float box = width/Assets::boxCount;
 
     sf::Color grey(150, 150, 150, 255);
