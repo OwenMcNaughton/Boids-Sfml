@@ -10,20 +10,20 @@
 #include "timer.h"
 #include "vectormath.h"
 
-int width = 1100;
-int height = 650;
+int width = 1360;
+int height = 768;
 
 std::vector<std::vector<sf::IntRect>> rects;
-sf::RenderWindow window(sf::VideoMode(width, height), "Boids");
+sf::RenderWindow window(sf::VideoMode(width, height), "Boids", sf::Style::Fullscreen);
 std::vector<Boid> boids;
 std::vector<Boid> sharks;
 
-void boidUpdate()
+void boidUpdate(int start, int end)
 {
     Timer timer;
     while(window.isOpen()) {
         float dt = timer.getDelta();
-        for(int i = 0; i != boids.size(); i++) {
+        for(int i = start; i != end; i++) {
             boids[i].update(dt, window, boids, sharks, rects);
         }
         timer.printFps();
@@ -80,7 +80,7 @@ int main()
     text.setStyle(sf::Text::Bold);
     text.setColor(sf::Color::White);
 
-    for(int i = 0; i != 800; i++) {
+    for(int i = 0; i != 1200; i++) {
         float a = std::rand() % 360;
         boids.push_back(Boid(assets.getTexture("arrow"),
                                 rand() % width, rand() % height,
@@ -94,7 +94,9 @@ int main()
     b.sharkify();
     sharks.push_back(b);
 
-    std::thread t1(boidUpdate);
+    std::thread t1(boidUpdate, 0, 400);
+    std::thread t2(boidUpdate, 400, 800);
+    std::thread t3(boidUpdate, 800, 1200);
 
     while (window.isOpen())
     {
@@ -233,6 +235,8 @@ int main()
     }
 
     t1.join();
+    t2.join();
+    t3.join();
 
     return 0;
 }
