@@ -3,27 +3,44 @@
 #include <ctime>
 #include <cmath>
 #include <SFML/Graphics.hpp>
+#include <thread>
 
 #include "boid.h"
 #include "assets.h"
 #include "timer.h"
 #include "vectormath.h"
 
+int width = 1100;
+int height = 650;
+
+std::vector<std::vector<sf::IntRect>> rects;
+sf::RenderWindow window(sf::VideoMode(width, height), "Boids");
+std::vector<Boid> boids;
+std::vector<Boid> sharks;
+
+void boidUpdate()
+{
+    Timer timer;
+    while(window.isOpen()) {
+        float dt = timer.getDelta();
+        for(int i = 0; i != boids.size(); i++) {
+            boids[i].update(dt, window, boids, sharks, rects);
+        }
+        timer.printFps();
+    }
+}
+
 int main()
 {
     std::srand(std::time(0));
 
-
     sf::Color bg(25, 25, 110, 255);
 
-    int width = 1100;
-    int height = 650;
     float box = width/Assets::boxCount;
 
     sf::Color grey(150, 150, 150, 255);
     sf::Color red(200, 20, 20, 255);
 
-    std::vector<std::vector<sf::IntRect>> rects;
     for(int i = 0; i != Assets::boxCount; i++) {
         std::vector<sf::IntRect> smallRects;
         for(int j = 0; j != Assets::boxJ; j++) {
@@ -54,8 +71,6 @@ int main()
         fakeRects.push_back(smallRects);
     }
 
-    sf::RenderWindow window(sf::VideoMode(width, height), "Boids");
-
     Timer timer;
 
     Assets assets;
@@ -65,7 +80,6 @@ int main()
     text.setStyle(sf::Text::Bold);
     text.setColor(sf::Color::White);
 
-    std::vector<Boid> boids;
     for(int i = 0; i != 800; i++) {
         float a = std::rand() % 360;
         boids.push_back(Boid(assets.getTexture("arrow"),
@@ -73,13 +87,14 @@ int main()
                                 a, width, height, rects));
     }
 
-    std::vector<Boid> sharks;
     float a = std::rand() % 360;
     Boid b(assets.getTexture("shark"),
                     sf::Mouse::getPosition(window).x + 20, sf::Mouse::getPosition(window).y + 20,
                     a, width, height, rects);
     b.sharkify();
     sharks.push_back(b);
+
+    std::thread t1(boidUpdate);
 
     while (window.isOpen())
     {
@@ -200,7 +215,7 @@ int main()
             }
         }
         for(int i = 0; i != boids.size(); i++) {
-            boids[i].update(dt, window, boids, sharks, rects);
+            //boids[i].update(dt, window, boids, sharks, rects);
             boids[i].draw(window);
         }
 
@@ -216,6 +231,8 @@ int main()
 
         timer.printFps();
     }
+
+    t1.join();
 
     return 0;
 }
