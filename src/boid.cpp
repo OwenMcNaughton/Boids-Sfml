@@ -110,12 +110,14 @@ void Boid::update(float dt, sf::RenderWindow& window, const std::vector<Boid>& b
 
     //rectPos = quickRectPos(rects);
 
-    sf::Vector2f sep = separation(boids);
+    bundledForce(boids);
+
+    sf::Vector2f sep = tempSep;
     sf::Vector2f sharkSep = sharkSeparation(sharks);
-    sf::Vector2f coh = cohesion(boids);
+    sf::Vector2f coh = tempCoh;
     sf::Vector2f ali;
     if(!shark)
-        ali = alignment(boids);
+        ali = tempAli;
 
     if(shark) {
         VectorMath::mulSIP(sep, 0);
@@ -172,6 +174,65 @@ void Boid::borders() {
     if (pos.y < 0) pos.y = worldHeight;
     if (pos.x > worldWidth) pos.x = 0;
     if (pos.y > worldHeight) pos.y = 0;
+}
+
+void Boid::bundledForce(const std::vector<Boid>& boids)
+{
+    tempSep.x = 0; tempSep.y = 0;
+    tempAli.x = 0; tempAli.y = 0;
+    tempCoh.x = 0; tempCoh.y = 0;
+
+    int scount = 0;
+    int acount = 0;
+    int ccount = 0;
+
+    for(int i = 0; i != boids.size(); i++) {
+        float dist = VectorMath::dist(pos, boids[i].pos);
+        if(dist > 0.001) {
+           if(dist < Boid::sepDist) {
+                sf::Vector2f diff = VectorMath::sub(pos, boids[i].pos);
+                VectorMath::normalize(diff);
+                VectorMath::divSIP(diff, dist);
+                VectorMath::addIP(tempSep, diff);
+                scount++;
+            }
+            if(dist * 3 < Boid::cohDist) {
+                VectorMath::addIP(tempCoh, boids[i].pos);
+                ccount++;
+            }
+            if(dist * 2 < Boid::alignDist) {
+                VectorMath::addIP(tempAli, boids[i].vel);
+                acount++;
+            }
+        }
+    }
+
+    if(scount > 0) {
+        VectorMath::divSIP(tempSep, (float)scount);
+        if(VectorMath::mag(tempSep) > 0) {
+            VectorMath::normalize(tempSep);
+            VectorMath::mulSIP(tempSep, maxSpeed);
+            VectorMath::subIP(tempSep, vel);
+            if(sharkFlag) {
+                VectorMath::limit(tempSep, xForce);
+            } else {
+                VectorMath::limit(tempSep, maxForce);
+            }
+        }
+    }
+
+    if(ccount > 0) {
+        VectorMath::divSIP(tempCoh, (float)ccount);
+        tempCoh = seek(tempCoh);
+    }
+
+    if(acount > 0) {
+        tempAli /= (float)acount;
+        VectorMath::normalize(tempAli);
+        VectorMath::mulSIP(tempAli, maxSpeed);
+        sf::Vector2f tempAli = VectorMath::sub(tempAli, vel);
+        VectorMath::limit(tempAli, maxForce);
+    }
 }
 
 sf::Vector2f Boid::separation(const std::vector<Boid>& boids)

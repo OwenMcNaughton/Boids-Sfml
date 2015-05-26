@@ -31,6 +31,7 @@ class Boid
         sf::Vector2f sharkSeparation(const std::vector<Boid>& boids);
         sf::Vector2f cohesion(const std::vector<Boid>& boids);
         sf::Vector2f alignment(const std::vector<Boid>& boids);
+        void bundledForce(const std::vector<Boid>& boids);
 
         sf::Vector2f seek(sf::Vector2f target);
 
@@ -80,6 +81,8 @@ class Boid
         int worldWidth;
         int worldHeight;
         int size;
+
+        sf::Vector2f tempSep, tempCoh, tempAli;
 
         bool sharkFlag;
 

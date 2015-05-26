@@ -16,7 +16,7 @@ int main()
 
     sf::Color bg(25, 25, 110, 255);
 
-    int width = 600;
+    int width = 1100;
     int height = 650;
     float box = width/Assets::boxCount;
 
@@ -66,7 +66,7 @@ int main()
     text.setColor(sf::Color::White);
 
     std::vector<Boid> boids;
-    for(int i = 0; i != 600; i++) {
+    for(int i = 0; i != 800; i++) {
         float a = std::rand() % 360;
         boids.push_back(Boid(assets.getTexture("arrow"),
                                 rand() % width, rand() % height,
